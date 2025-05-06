@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login com FaceID</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Entrar com Face ID</h1>
+    
+    <video id="camera" autoplay></video>
+    <button onclick="capturarImagem()">Entrar</button>
+
+    <div id="loader" class="loader"></div>
+
+    <canvas id="canvas" style="display: none;"></canvas>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
