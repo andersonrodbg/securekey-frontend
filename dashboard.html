@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard - Gerenciador de Senhas</title>
+  <link rel="stylesheet" href="dashboard.css">
+</head>
+<body>
+  <header>
+    <h1>Gerenciador de Senhas</h1>
+    <button id="logoutBtn">Sair</button>
+  </header>
+
+  <main>
+    <section class="form-section">
+      <h2>Adicionar Nova Senha</h2>
+      <form id="passwordForm">
+        <label for="app">Aplicativo/Serviço:</label>
+        <select id="app" required>
+          <option value="">Selecione...</option>
+          <option value="banco">Banco</option>
+          <option value="streaming">Streaming</option>
+          <option value="gmail">Gmail</option>
+          <option value="wifi">Wi-Fi</option>
+          <option value="outros">Outros</option>
+        </select>
+
+        <label for="username">Usuário/Email:</label>
+        <input type="text" id="username" required>
+
+        <label for="password">Senha:</label>
+        <input type="password" id="password" required>
+
+        <button type="submit">Salvar</button>
+      </form>
+    </section>
+
+    <section class="list-section">
+      <h2>Suas Senhas</h2>
+      <div id="passwordList"></div>
+    </section>
+  </main>
+
+  <script src="dashboard.js"></script>
+</body>
+</html>
