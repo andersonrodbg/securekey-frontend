@@ -3,19 +3,31 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Login com FaceID</title>
+  <title>Login Seguro</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="container">
-    <h1>Secure Key</h1>
-    
-    <video id="camera" autoplay></video>
-    <button onclick="capturarImagem()">Entrar</button>
+  <div class="login-container">
+    <h1>🔐 SecureKey</h1>
+    <p>Escolha uma forma de login</p>
 
-    <div id="loader" class="loader"></div>
+    <div class="login-options">
+      <button id="faceBtn" class="btn">Entrar com Face ID</button>
+      <button id="tokenBtn" class="btn secondary">Entrar com Token</button>
+    </div>
 
-    <canvas id="canvas" style="display: none;"></canvas>
+    <div id="faceSection" class="hidden">
+      <video id="camera" autoplay></video>
+      <button onclick="capturarImagem()" class="btn">Confirmar Rosto</button>
+      <div id="loader" class="loader"></div>
+      <canvas id="canvas" style="display:none;"></canvas>
+    </div>
+
+    <div id="tokenSection" class="hidden">
+      <input type="text" id="email" placeholder="Digite seu e-mail" />
+      <input type="password" id="token" placeholder="Digite seu token de acesso" />
+      <button onclick="loginComToken()" class="btn">Entrar</button>
+    </div>
   </div>
 
   <script src="script.js"></script>
