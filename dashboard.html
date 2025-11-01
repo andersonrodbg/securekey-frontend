@@ -6,7 +6,7 @@
   <title>Dashboard - Gerenciador de Senhas</title>
   <link rel="stylesheet" href="dashboard.css">
 </head>
-<body>
+<body data-user-id="1">
   <header>
     <h1>Gerenciador de Senhas</h1>
     <button id="logoutBtn">Sair</button>
@@ -27,6 +27,8 @@
           <option value="outros">Outros</option>
         </select>
 
+        <label id="commentLabel" style="display:none;">Comentário:</label>
+        <input type="text" id="comment" style="display:none;">
 
         <label for="comment" id="commentLabel" style="display: none;">Comentário/Descrição:</label>
         <input type="text" id="comment" style="display: none;">

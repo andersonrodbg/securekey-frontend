@@ -1,58 +1,69 @@
 const form = document.getElementById("passwordForm");
-const list = document.getElementById("passwordList");
+const passwordList = document.getElementById("passwordList");
 
-let passwords = [];
+// Pega o userId do HTML (ex: <body data-user-id="1">)
+const userId = document.body.getAttribute("data-user-id");
 
-form.addEventListener("submit", (e) => {
+// =============== SALVAR NOVA SENHA ==================
+form.addEventListener("submit", async (e) => {
   e.preventDefault();
 
   const app = document.getElementById("app").value;
-  const user = document.getElementById("username").value;
-  const pass = document.getElementById("password").value;
+  const ussername = document.getElementById("username").value;
+  const password = document.getElementById("password").value;
+  const comment = document.getElementById("comment")?.value || "";
 
-  const entry = { app, user, pass };
-  passwords.push(entry);
+  const dados = {
+    appName: app,
+    username: username,
+    password: password,
+    comment: comment
+  };
 
-  renderList();
-  form.reset();
+  const res = await fetch(`http://localhost:8080/passwords/${userId}`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(dados)
+  });
+
+  if (res.ok) {
+    alert("Senha salva com sucesso ✅");
+    form.reset();
+    carregarSenhas();
+  } else {
+    alert("Erro ao salvar ❌");
+  }
 });
 
-function renderList() {
-  list.innerHTML = "";
+// =============== CARREGAR SENHAS DO USUÁRIO ==================
+async function carregarSenhas() {
+  const res = await fetch(`http://localhost:8080/passwords/${userId}`);
+  
+  if (!res.ok) {
+    passwordList.innerHTML = "<p>Erro ao carregar senhas ❌</p>";
+    return;
+  }
 
-  passwords.forEach((item, index) => {
-    const card = document.createElement("div");
-    card.className = "password-card";
+  const lista = await res.json();
+  passwordList.innerHTML = ""; // Limpa anterior
 
-    card.innerHTML = `
-      <h3>${item.app.toUpperCase()}</h3>
-      <p class="password-info"><b>Usuário:</b> ${item.user}</p>
-      <p class="password-info"><b>Senha:</b> <span id="pass-${index}">•••••••</span></p>
-
-      <div class="password-actions">
-        <button class="show-btn" onclick="togglePass(${index})">Mostrar</button>
-        <button class="delete-btn" onclick="deletePass(${index})">Excluir</button>
-      </div>
+  lista.forEach(item => {
+    const div = document.createElement("div");
+    div.classList.add("senha-item");
+    div.innerHTML = `
+      <strong>${item.appName}</strong><br>
+      Usuário: ${item.username}<br>
+      Senha: ${item.password}<br>
+      ${item.comment ? `<em>Comentário: ${item.comment}</em>` : ""}
     `;
-
-    list.appendChild(card);
+    passwordList.appendChild(div);
   });
 }
 
-function togglePass(i) {
-  const span = document.getElementById(`pass-${i}`);
-  if (span.innerText === "•••••••") {
-    span.innerText = passwords[i].pass;
-  } else {
-    span.innerText = "•••••••";
-  }
-}
+// Carrega ao abrir
+carregarSenhas();
 
-function deletePass(i) {
-  passwords.splice(i, 1);
-  renderList();
-}
-
+// =============== CAMPO DE COMENTÁRIO DINÂMICO ==================
 const appSelect = document.getElementById("app");
 const commentField = document.getElementById("comment");
 const commentLabel = document.getElementById("commentLabel");
@@ -60,43 +71,31 @@ const commentLabel = document.getElementById("commentLabel");
 appSelect.addEventListener("change", () => {
   const value = appSelect.value;
 
-  if (value === "banco") {
+  if (["banco", "streaming", "gmail", "wifi", "outros", "wallet"].includes(value)) {
     commentLabel.style.display = "block";
     commentField.style.display = "block";
-    commentField.placeholder = "Ex: Banco do Brasil, Caixa, Itaú...";
-  }
 
-  else if (value === "streaming") {
-    commentLabel.style.display = "block";
-    commentField.style.display = "block";
-    commentField.placeholder = "Ex: Netflix, Disney+, Max...";
-  }
-
-  else if (value === "gmail") {
-    commentLabel.style.display = "block";
-    commentField.style.display = "block";
-    commentField.placeholder = "Ex: Conta pessoal, Conta trabalho...";
-  }
-
-  else if (value === "wifi") {
-    commentLabel.style.display = "block";
-    commentField.style.display = "block";
-    commentField.placeholder = "Ex: Wi-Fi Casa, Wi-Fi Empresa...";
-  }
-
-  else if (value === "outros") {
-    commentLabel.style.display = "block";
-    commentField.style.display = "block";
-    commentField.placeholder = "Descreva o serviço...";
-  }
-
-  else if (value === "wallet") {
-    commentLabel.style.display = "block";
-    commentField.style.display = "block";
-    commentField.placeholder = "Ex: MetaMask, BlueWallet...";
-  }
-
-  else {
+    switch (value) {
+      case "banco":
+        commentField.placeholder = "Ex: Banco do Brasil, Caixa, Itaú...";
+        break;
+      case "streaming":
+        commentField.placeholder = "Ex: Netflix, Disney+, Max...";
+        break;
+      case "gmail":
+        commentField.placeholder = "Ex: Conta pessoal, Conta trabalho...";
+        break;
+      case "wifi":
+        commentField.placeholder = "Ex: Wi-Fi Casa, Wi-Fi Empresa...";
+        break;
+      case "wallet":
+        commentField.placeholder = "Ex: MetaMask, BlueWallet...";
+        break;
+      case "outros":
+        commentField.placeholder = "Descreva o serviço...";
+        break;
+    }
+  } else {
     commentField.style.display = "none";
     commentLabel.style.display = "none";
     commentField.value = "";
